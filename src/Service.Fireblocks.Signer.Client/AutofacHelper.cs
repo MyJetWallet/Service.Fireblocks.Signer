@@ -9,9 +9,9 @@ namespace Service.Fireblocks.Signer.Client
     {
         public static void RegisterFireblocksApiClient(this ContainerBuilder builder, string grpcServiceUrl)
         {
-            var factory = new FireblocksApiClientFactory(grpcServiceUrl);
+            var factory = new FireblocksSignerClientFactory(grpcServiceUrl);
 
-            builder.RegisterInstance(factory.GetVaultAccountService()).As<ITransactionService>().SingleInstance();
+            builder.RegisterInstance(factory.GetTransactionService()).As<ITransactionService>().SingleInstance();
         }
     }
 }

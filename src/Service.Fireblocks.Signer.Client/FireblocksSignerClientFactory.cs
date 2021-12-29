@@ -5,13 +5,13 @@ using Service.Fireblocks.Signer.Grpc;
 namespace Service.Fireblocks.Signer.Client
 {
     [UsedImplicitly]
-    public class FireblocksApiClientFactory: MyGrpcClientFactory
+    public class FireblocksSignerClientFactory: MyGrpcClientFactory
     {
-        public FireblocksApiClientFactory(string grpcServiceUrl) : base(grpcServiceUrl)
+        public FireblocksSignerClientFactory(string grpcServiceUrl) : base(grpcServiceUrl)
         {
         }
 
-        public ITransactionService GetVaultAccountService() => CreateGrpcService<ITransactionService>();
+        public ITransactionService GetTransactionService() => CreateGrpcService<ITransactionService>();
 
         public IEncryptionService GetEncryptionService() => CreateGrpcService<IEncryptionService>();
     }

@@ -19,19 +19,29 @@ namespace TestApp
             Console.ReadLine();
 
 
-            var factory = new FireblocksApiClientFactory("http://localhost:5001");
-            var client = factory.GetVaultAccountService();
+            //var factory = new FireblocksSignerClientFactory("http://localhost:5001");
+            var factory = new FireblocksSignerClientFactory("http://fireblocks-signer.spot-services.svc.cluster.local");
+            var client = factory.GetTransactionService();
             var encryption = factory.GetEncryptionService();
 
-            var publicKey = await File.ReadAllTextAsync(@"D:\fireblocks uat\fireblocks_api_key");
-            var privateKey = await File.ReadAllTextAsync(@"D:\fireblocks uatfireblocks_secret.key");
+            //var publicKey = await File.ReadAllTextAsync(@"D:\fireblocks uat\fireblocks_api_key");
+            //var privateKey = await File.ReadAllTextAsync(@"D:\fireblocks uat\fireblocks_secret.key");
 
-            var x = await encryption.SetApiKeysAsync(new ()
+            //var x = await encryption.SetApiKeysAsync(new ()
+            //{
+            //    ApiKey = publicKey,
+            //    PrivateKey = privateKey 
+            //});
+
+            var tx = await client.CreateTransactionAsync(new Service.Fireblocks.Signer.Grpc.Models.Transactions.CreateTransactionRequest
             {
-                ApiKey = publicKey,
-                PrivateKey = privateKey 
+                Amount = 0.01m,
+                AssetNetwork = "ETH",
+                AssetSymbol = "fireblocks-eth-test",
+                ExternalTransactionId = "test1",
+                Tag = "",
+                ToAddress = "0x1Eab7d412a25a5d00Ec3d04648aa54CeA4aB7e94"
             });
-
             //var resp = await client.GetVaultAccountAsync(new()
             //{
             //    VaultAccountId = "3"

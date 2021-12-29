@@ -19,6 +19,8 @@ namespace Service.Fireblocks.Signer.Settings
 
         [YamlProperty("FireblocksSigner.MyNoSqlWriterUrl")]
         public string MyNoSqlWriterUrl { get; internal set; }
+
+        [YamlProperty("FireblocksSigner.MyNoSqlReaderHostPort")]
         public string MyNoSqlReaderHostPort { get; internal set; }
     }
 }

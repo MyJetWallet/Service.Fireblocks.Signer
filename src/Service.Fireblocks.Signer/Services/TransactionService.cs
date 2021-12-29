@@ -70,7 +70,7 @@ namespace Service.Fireblocks.Signer.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error creating VaultAccount @{context}", request);
+                _logger.LogError(e, "Error creating Transaction {@context}", request);
 
                 return new ()
                 {
