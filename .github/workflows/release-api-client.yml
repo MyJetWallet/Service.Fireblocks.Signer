@@ -1,0 +1,41 @@
+name: Release API client nuget
+
+on:
+  push:
+    tags: "client-*"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.*
+        source-url: https://nuget.pkg.github.com/myjetwallet/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}  
+
+    - name: Build
+      run: dotnet build --configuration Release /p:AssemblyVersion=${GITHUB_REF#refs/tags/client-}
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release
+
+    - name: Create the package
+      run: dotnet pack --configuration Release src/Service.Fireblocks.Signer.Client /p:Version=${GITHUB_REF#refs/tags/client-}
+
+    - name: Publish the package to GPR
+      run: dotnet nuget push src/Service.Fireblocks.Signer.Client/bin/Release/*.nupkg -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_TOCKEN }}
+
+    - name: Publish the package to GitHub
+      uses: MyJetWallet/nuget-publish-to-github-packages-action@v2.1
+      with:
+        nupkg-path:  './src/Service.Fireblocks.Signer.Client/bin/Release/*.nupkg'
+        repo-owner:  'myjetwallet'
+        gh-user:  ${{ github.actor }}
+        token:  ${{ secrets.GITHUB_TOKEN }}  
+

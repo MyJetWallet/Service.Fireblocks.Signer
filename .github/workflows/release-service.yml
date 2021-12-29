@@ -1,0 +1,85 @@
+name: Release Service
+
+on:
+  push:
+    tags: "1.*"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.*
+
+    - name: Get current time
+      uses: MyJetTools/get-current-time@v2
+      id: current-time
+      with:
+        format: YYYY-MM-DD HH:mm:ss
+        utcOffset: "+00:00"
+
+    - name: Build
+      run: dotnet build --configuration Release /p:AssemblyVersion=${GITHUB_REF#refs/tags/}
+    - name: Test
+      run: dotnet test --no-build --configuration Release
+    - name: ls
+      run: ls
+
+    - name: Publish Service
+      run: dotnet publish ./src/Service.Fireblocks.Signer/Service.Fireblocks.Signer.csproj --configuration Release /p:AssemblyVersion=${GITHUB_REF#refs/tags/} --output ./publish-api
+
+    - name: Check Service dir
+      run: ls ./publish-api
+
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/tags/})"
+      id: extract_branch
+
+    - name: Publish image
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        path: ./publish-api
+        registry: docker.pkg.github.com
+        repository: ${{ secrets.ORG_NAME }}/service.fireblocks.signer/myjetwallet.service.fireblocks.signer
+        tag_with_ref: true
+        build_args: app_version=myjetwallet.service.fireblocks.signer:${{ steps.extract_branch.outputs.branch }},app_compilation_date=${{ steps.current-time.outputs.formattedTime }}
+
+    - name: Publish image ST
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.ST_DOCKER_USER }}
+        password: ${{ secrets.ST_DOCKER_PASSWORD }}
+        path: ./publish-api
+        registry: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
+        repository: spot/myjetwallet.service.fireblocks.signer
+        tag_with_ref: true
+        build_args: app_version=myjetwallet.service.fireblocks.signer:${{ steps.extract_branch.outputs.branch }},app_compilation_date=${{ steps.current-time.outputs.formattedTime }}
+
+  update_version:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: get uat kube yamls
+      uses: actions/checkout@v2
+      with:
+        repository: MyJetWallet/kubernates-infrastructure
+        ref: uat        
+        token: ${{ secrets.UAT_GIT_TOKEN }}
+    - run: |
+        pattern=myjetwallet.service.fireblocks.signer:.*$
+        imagename=myjetwallet.service.fireblocks.signer:${GITHUB_REF#refs/tags/}
+        reg=$"s/${pattern}/${imagename}/g"
+        echo $reg
+        find . -type f -name "deployment.*" -print0 -exec sed -i -r $reg {} \;
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git commit -a -m "Update version of service myjetwallet.service.fireblocks.signer"
+        git push
