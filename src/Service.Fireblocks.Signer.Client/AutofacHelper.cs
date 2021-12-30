@@ -7,7 +7,7 @@ namespace Service.Fireblocks.Signer.Client
 {
     public static class AutofacHelper
     {
-        public static void RegisterFireblocksApiClient(this ContainerBuilder builder, string grpcServiceUrl)
+        public static void RegisterFireblocksSignerClient(this ContainerBuilder builder, string grpcServiceUrl)
         {
             var factory = new FireblocksSignerClientFactory(grpcServiceUrl);
 
