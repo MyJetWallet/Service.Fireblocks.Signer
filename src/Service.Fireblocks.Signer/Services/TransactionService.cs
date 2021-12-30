@@ -51,6 +51,7 @@ namespace Service.Fireblocks.Signer.Services
                     ExternalTxId = request.ExternalTransactionId,
                     Destination = new DestinationTransferPeerPath
                     {
+                        Type = TransferPeerPathType.ONE_TIME_ADDRESS,
                         OneTimeAddress = new OneTimeAddress
                         {
                             Address = request.ToAddress,

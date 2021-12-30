@@ -19,8 +19,8 @@ namespace TestApp
             Console.ReadLine();
 
 
-            //var factory = new FireblocksSignerClientFactory("http://localhost:5001");
-            var factory = new FireblocksSignerClientFactory("http://fireblocks-signer.spot-services.svc.cluster.local");
+            var factory = new FireblocksSignerClientFactory("http://localhost:5001");
+            //var factory = new FireblocksSignerClientFactory("http://fireblocks-signer.spot-services.svc.cluster.local");
             var client = factory.GetTransactionService();
             var encryption = factory.GetEncryptionService();
 
@@ -36,9 +36,9 @@ namespace TestApp
             var tx = await client.CreateTransactionAsync(new Service.Fireblocks.Signer.Grpc.Models.Transactions.CreateTransactionRequest
             {
                 Amount = 0.01m,
-                AssetNetwork = "ETH",
-                AssetSymbol = "fireblocks-eth-test",
-                ExternalTransactionId = "test1",
+                AssetSymbol = "ETH",
+                AssetNetwork = "fireblocks-eth-test",
+                ExternalTransactionId = Guid.NewGuid().ToString(),
                 Tag = "",
                 ToAddress = "0x1Eab7d412a25a5d00Ec3d04648aa54CeA4aB7e94"
             });
