@@ -9,5 +9,8 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
     {
         [DataMember(Order = 1)]
         public ErrorResponse Error { get; set; }
+
+        [DataMember(Order = 2)]
+        public string FireblocksTxId { get; set; }
     }
 }

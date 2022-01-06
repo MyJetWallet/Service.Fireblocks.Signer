@@ -4,6 +4,8 @@
     {
         Unknown,
         AlreadyExist,
-        DoesNotExist
+        DoesNotExist,
+        ApiError,
+        NotEnoughBalance
     }
 }
