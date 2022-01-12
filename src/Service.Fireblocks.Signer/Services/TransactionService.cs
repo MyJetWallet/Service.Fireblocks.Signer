@@ -7,6 +7,7 @@ using MyJetWallet.Fireblocks.Domain.Models.Addresses;
 using MyNoSqlServer.Abstractions;
 using Service.Blockchain.Wallets.MyNoSql.AssetsMappings;
 using Service.Fireblocks.Signer.Grpc;
+using Service.Fireblocks.Signer.Grpc.Models.Addresses;
 using Service.Fireblocks.Signer.Grpc.Models.Transactions;
 
 namespace Service.Fireblocks.Signer.Services
@@ -15,16 +16,19 @@ namespace Service.Fireblocks.Signer.Services
     {
         private readonly ILogger<TransactionService> _logger;
         private readonly IClient _client;
+        private readonly ITransactionsClient _transactionsClient;
         private readonly IVaultClient _vaultClient;
         private readonly IMyNoSqlServerDataReader<AssetMappingNoSql> _assetMappings;
 
         public TransactionService(ILogger<TransactionService> logger,
             IClient client,
+            ITransactionsClient transactionsClient,
             IVaultClient vaultClient,
             IMyNoSqlServerDataReader<AssetMappingNoSql> assetMappings)
         {
             _logger = logger;
             _client = client;
+            _transactionsClient = transactionsClient;
             _vaultClient = vaultClient;
             _assetMappings = assetMappings;
         }
@@ -115,6 +119,33 @@ namespace Service.Fireblocks.Signer.Services
                 _logger.LogError(e, "Error creating Transaction {@context}", request);
 
                 return new()
+                {
+                    Error = new Grpc.Models.Common.ErrorResponse
+                    {
+                        ErrorCode = Grpc.Models.Common.ErrorCode.Unknown,
+                        Message = e.Message
+                    }
+                };
+            }
+        }
+
+        public async Task<Grpc.Models.Addresses.ValidateAddressResponse> ValidateAddressAsync(ValidateAddressRequest request)
+        {
+            try
+            {
+                var response = await _transactionsClient.Validate_addressAsync(request.AssetId, request.Address);
+
+                return new Grpc.Models.Addresses.ValidateAddressResponse
+                {
+                    Address = request.Address,
+                    IsValid = response.Result.IsValid,
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error validating address @{context}", request);
+
+                return new Grpc.Models.Addresses.ValidateAddressResponse
                 {
                     Error = new Grpc.Models.Common.ErrorResponse
                     {

@@ -1,5 +1,6 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
+using Service.Fireblocks.Signer.Grpc.Models.Addresses;
 using Service.Fireblocks.Signer.Grpc.Models.Transactions;
 
 namespace Service.Fireblocks.Signer.Grpc
@@ -9,5 +10,8 @@ namespace Service.Fireblocks.Signer.Grpc
     {
         [OperationContract]
         Task<CreateTransactionResponse> CreateTransactionAsync(CreateTransactionRequest request);
+
+        [OperationContract]
+        Task<ValidateAddressResponse> ValidateAddressAsync(ValidateAddressRequest request);
     }
 }
