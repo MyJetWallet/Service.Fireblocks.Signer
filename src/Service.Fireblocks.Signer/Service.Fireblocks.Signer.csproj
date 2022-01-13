@@ -17,7 +17,7 @@
     <PackageReference Include="MyJetWallet.Sdk.GrpcSchema" Version="1.0.6" />
     <PackageReference Include="MyJetWallet.Sdk.NoSql" Version="2.0.2" />
     <PackageReference Include="MyJetWallet.Sdk.Service" Version="2.1.6" />
-    <PackageReference Include="MyJetWallet.Service.Blockchain.Wallets.Client" Version="1.2.0" />
+    <PackageReference Include="MyJetWallet.Service.Blockchain.Wallets.Client" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
