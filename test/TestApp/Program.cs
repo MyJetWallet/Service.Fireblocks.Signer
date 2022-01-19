@@ -28,8 +28,7 @@ namespace TestApp
             //var privateKey = await File.ReadAllTextAsync(@"D:\fireblocks uat\fireblocks_secret.key");
 
             var publicKey = args[0];
-            var privateKey = await File.ReadAllTextAsync(args[1]);
-
+            var privateKey = await File.ReadAllTextAsync(@"/Users/acidworx/cosigner-prod/fireblocks_secret_signer.key");
 
             var x = await encryption.SetApiKeysAsync(new()
             {
