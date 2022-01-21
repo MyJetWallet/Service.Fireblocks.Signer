@@ -102,7 +102,7 @@ namespace Service.Fireblocks.Signer.Services
                             Tag = request.Tag,
                         }
                     },
-                    TreatAsGrossAmount = false,
+                    TreatAsGrossAmount = request.TreatAsGrossAmount,
                     FailOnLowFee = false,
                     FeeLevel = TransactionRequestFeeLevel.MEDIUM,
                     Operation = TransactionOperation.TRANSFER,

@@ -23,5 +23,11 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
         [DataMember(Order = 6)]
         public string Tag { get; set; }
 
+        /// <summary>
+        /// Should fee be included in amount?
+        /// </summary>
+        [DataMember(Order = 7)]
+        public bool TreatAsGrossAmount { get; set; }
+
     }
 }
