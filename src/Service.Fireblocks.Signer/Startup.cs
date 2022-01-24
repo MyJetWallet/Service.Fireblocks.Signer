@@ -47,7 +47,6 @@ namespace Service.Fireblocks.Signer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcSchema<TransactionService, ITransactionService>();
-                endpoints.MapGrpcSchema<TransactionService, ITransactionService>();
                 endpoints.MapGrpcSchema<EncryptionService, IEncryptionService>();
 
                 endpoints.MapGrpcSchemaRegistry();
