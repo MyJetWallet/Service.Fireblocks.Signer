@@ -69,7 +69,8 @@ namespace Service.Fireblocks.Signer.Services
 
                 var balance = vaultAcc.Result.Assets.FirstOrDefault(x => x.Id == assetMapping.AssetMapping.FireblocksAssetId);
 
-                if (balance == null || !decimal.TryParse(balance.Available, out var availableBalance) || availableBalance <= request.Amount)
+                if (balance == null || !decimal.TryParse(balance.Available, out var availableBalance) || (availableBalance <= request.Amount && 
+                    !request.TreatAsGrossAmount))
                 {
                     return new Grpc.Models.Transactions.CreateTransactionResponse
                     {
