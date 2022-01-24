@@ -22,5 +22,6 @@ namespace Service.Fireblocks.Signer.Settings
 
         [YamlProperty("FireblocksSigner.MyNoSqlReaderHostPort")]
         public string MyNoSqlReaderHostPort { get; internal set; }
+
     }
 }

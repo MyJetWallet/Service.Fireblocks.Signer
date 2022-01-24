@@ -29,5 +29,7 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
         [DataMember(Order = 7)]
         public bool TreatAsGrossAmount { get; set; }
 
+        [DataMember(Order = 8)]
+        public string DestinationVaultAccountId { get; set; }
     }
 }

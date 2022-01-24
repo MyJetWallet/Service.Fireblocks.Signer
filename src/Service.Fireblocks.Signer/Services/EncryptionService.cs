@@ -34,6 +34,7 @@ namespace Service.Fireblocks.Signer.Services
             });
         }
 
+        //TODO: ADD LOGGING
         public async Task<SetApiKeyResponse> SetApiKeysAsync(SetApiKeyRequest request)
         {
             var apiKey = _symmetricEncryptionService.Encrypt(request.ApiKey);

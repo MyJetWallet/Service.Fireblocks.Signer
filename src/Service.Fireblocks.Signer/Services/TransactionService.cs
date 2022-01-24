@@ -82,6 +82,38 @@ namespace Service.Fireblocks.Signer.Services
 
                 var idempotencyKey = $"transaction_{request.ExternalTransactionId}";
                 idempotencyKey = idempotencyKey.Substring(0, Math.Min(40, idempotencyKey.Length));
+                DestinationTransferPeerPath destination;
+
+                if (!string.IsNullOrEmpty(request.ToAddress))
+                {
+                    destination = new DestinationTransferPeerPath
+                    {
+                        Type = TransferPeerPathType.ONE_TIME_ADDRESS,
+                        OneTimeAddress = new OneTimeAddress
+                        {
+                            Address = request.ToAddress,
+                            Tag = request.Tag,
+                        }
+                    };
+                }
+                else if (!string.IsNullOrEmpty(request.DestinationVaultAccountId))
+                {
+                    destination = new DestinationTransferPeerPath
+                    {
+                        Type = TransferPeerPathType.VAULT_ACCOUNT,
+                        Id = request.DestinationVaultAccountId
+                    };
+                } else
+                {
+                    return new Grpc.Models.Transactions.CreateTransactionResponse
+                    {
+                        Error = new Grpc.Models.Common.ErrorResponse
+                        {
+                            ErrorCode = Grpc.Models.Common.ErrorCode.ApiError,
+                            Message = $"Either {nameof(request.DestinationVaultAccountId)} or {nameof(request.ToAddress)} should be filled!"
+                        }
+                    };
+                }
 
                 var response = await _client.TransactionsPostAsync(idempotencyKey, new TransactionRequest
                 {
@@ -93,15 +125,7 @@ namespace Service.Fireblocks.Signer.Services
                         Type = TransferPeerPathType.VAULT_ACCOUNT
                     },
                     ExternalTxId = request.ExternalTransactionId,
-                    Destination = new DestinationTransferPeerPath
-                    {
-                        Type = TransferPeerPathType.ONE_TIME_ADDRESS,
-                        OneTimeAddress = new OneTimeAddress
-                        {
-                            Address = request.ToAddress,
-                            Tag = request.Tag,
-                        }
-                    },
+                    Destination = destination,
                     TreatAsGrossAmount = request.TreatAsGrossAmount,
                     FailOnLowFee = false,
                     FeeLevel = TransactionRequestFeeLevel.MEDIUM,
