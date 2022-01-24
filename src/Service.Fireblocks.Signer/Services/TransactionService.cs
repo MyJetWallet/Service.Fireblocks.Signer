@@ -40,7 +40,8 @@ namespace Service.Fireblocks.Signer.Services
                 var assetMapping = _assetMappings.Get(AssetMappingNoSql.GeneratePartitionKey(request.AssetSymbol),
                                                       AssetMappingNoSql.GenerateRowKey(request.AssetNetwork));
 
-                var vaultAcc = await _vaultClient.AccountsGetAsync(assetMapping.AssetMapping.WithdrawalVaultAccountId, default);
+                var fromVaultAccountId = string.IsNullOrEmpty(request.FromVaultAccountId) ? assetMapping.AssetMapping.WithdrawalVaultAccountId : request.FromVaultAccountId;
+                var vaultAcc = await _vaultClient.AccountsGetAsync(fromVaultAccountId, default);
 
                 if (vaultAcc.StatusCode != 200)
                 {
@@ -75,7 +76,7 @@ namespace Service.Fireblocks.Signer.Services
                         Error = new Grpc.Models.Common.ErrorResponse
                         {
                             ErrorCode = Grpc.Models.Common.ErrorCode.NotEnoughBalance,
-                            Message = $"Not enough balance ASSET: {assetMapping.AssetMapping.FireblocksAssetId}; VAULT ACCOUNT: {assetMapping.AssetMapping.WithdrawalVaultAccountId}"
+                            Message = $"Not enough balance ASSET: {assetMapping.AssetMapping.FireblocksAssetId}; VAULT ACCOUNT: {fromVaultAccountId}"
                         }
                     };
                 }
@@ -121,7 +122,7 @@ namespace Service.Fireblocks.Signer.Services
                     AssetId = assetMapping.AssetMapping.FireblocksAssetId,
                     Source = new TransferPeerPath
                     {
-                        Id = assetMapping.AssetMapping.WithdrawalVaultAccountId,
+                        Id = fromVaultAccountId,
                         Type = TransferPeerPathType.VAULT_ACCOUNT
                     },
                     ExternalTxId = request.ExternalTransactionId,

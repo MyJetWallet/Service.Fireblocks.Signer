@@ -31,5 +31,8 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
 
         [DataMember(Order = 8)]
         public string DestinationVaultAccountId { get; set; }
+
+        [DataMember(Order = 9)]
+        public string FromVaultAccountId { get; set; }
     }
 }
