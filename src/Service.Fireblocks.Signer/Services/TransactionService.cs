@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MyJetWallet.Fireblocks.Client;
 using MyJetWallet.Fireblocks.Domain.Models.Addresses;
+using MyJetWallet.Sdk.Service;
 using MyNoSqlServer.Abstractions;
 using Service.Blockchain.Wallets.MyNoSql.AssetsMappings;
 using Service.Fireblocks.Signer.Grpc;
@@ -45,7 +46,7 @@ namespace Service.Fireblocks.Signer.Services
 
                 if (vaultAcc.StatusCode != 200)
                 {
-                    _logger.LogError("Fireblocks signer can't execute http request: {@context}", request);
+                    _logger.LogError("Fireblocks signer can't execute http request: {@context}", request.ToJson());
 
                     return new Grpc.Models.Transactions.CreateTransactionResponse
                     {
@@ -134,6 +135,12 @@ namespace Service.Fireblocks.Signer.Services
                     Operation = TransactionOperation.TRANSFER,
                 });
 
+                _logger.LogInformation("Signer Response {@context}", new 
+                {
+                    Request = request.ToJson(),
+                    Response = response.ToJson(),
+                });
+
                 return new()
                 {
                     FireblocksTxId = response.Result.Id
@@ -142,7 +149,7 @@ namespace Service.Fireblocks.Signer.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error creating Transaction {@context}", request);
+                _logger.LogError(e, "Error creating Transaction {@context}", request.ToJson());
 
                 return new()
                 {
