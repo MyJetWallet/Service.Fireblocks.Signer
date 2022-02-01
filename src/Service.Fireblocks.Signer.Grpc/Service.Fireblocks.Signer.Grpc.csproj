@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MyJetWallet.Fireblocks" Version="1.0.4" />
+    <PackageReference Include="MyJetWallet.Fireblocks" Version="1.1.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
   </ItemGroup>
 
