@@ -24,7 +24,7 @@
     <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.152" />
     <PackageReference Include="SimpleTrading.BaseMetrics" Version="1.0.3" />
     <PackageReference Include="SimpleTrading.ServiceStatusReporterConnector" Version="1.0.9" />
-    <PackageReference Include="MySettingsReader" Version="1.2.1" />
+    <PackageReference Include="MySettingsReader" Version="1.2.2" />
   </ItemGroup>
 
   <ItemGroup>
