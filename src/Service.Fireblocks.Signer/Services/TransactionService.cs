@@ -133,6 +133,7 @@ namespace Service.Fireblocks.Signer.Services
                     FailOnLowFee = false,
                     FeeLevel = TransactionRequestFeeLevel.MEDIUM,
                     Operation = TransactionOperation.TRANSFER,
+                    ForceSweep = request.ForceSweep,
                 });
 
                 _logger.LogInformation("Signer Response {@context}", new 

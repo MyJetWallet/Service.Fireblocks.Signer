@@ -34,5 +34,11 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
 
         [DataMember(Order = 9)]
         public string FromVaultAccountId { get; set; }
+
+        /// <summary>
+        /// For Polkadot only
+        /// </summary>
+        [DataMember(Order = 10)]
+        public bool ForceSweep { get; set; }
     }
 }
