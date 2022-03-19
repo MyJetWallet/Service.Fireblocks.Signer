@@ -15,6 +15,7 @@ using Service.Fireblocks.Signer.Modules;
 using Service.Fireblocks.Signer.Services;
 using SimpleTrading.BaseMetrics;
 using SimpleTrading.ServiceStatusReporterConnector;
+using MyJetWallet.ApiSecurityManager.Autofac;
 
 namespace Service.Fireblocks.Signer
 {
@@ -48,6 +49,7 @@ namespace Service.Fireblocks.Signer
             {
                 endpoints.MapGrpcSchema<TransactionService, ITransactionService>();
                 endpoints.MapGrpcSchema<EncryptionService, IEncryptionService>();
+                endpoints.RegisterGrpcServices();
 
                 endpoints.MapGrpcSchemaRegistry();
 
