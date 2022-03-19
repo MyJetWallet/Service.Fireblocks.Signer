@@ -18,10 +18,13 @@ namespace Service.Fireblocks.Signer.Settings
         public string FireblocksBaseUrl { get; set; }
 
         [YamlProperty("FireblocksSigner.MyNoSqlWriterUrl")]
-        public string MyNoSqlWriterUrl { get; internal set; }
+        public string MyNoSqlWriterUrl { get; set; }
 
         [YamlProperty("FireblocksSigner.MyNoSqlReaderHostPort")]
-        public string MyNoSqlReaderHostPort { get; internal set; }
+        public string MyNoSqlReaderHostPort { get; set; }
+
+        [YamlProperty("FireblocksSigner.ApiKeyId")]
+        public string ApiKeyId { get; set; }
 
     }
 }

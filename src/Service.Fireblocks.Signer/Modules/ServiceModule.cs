@@ -9,6 +9,7 @@ using Service.Fireblocks.Signer.NoSql;
 using MyJetWallet.Fireblocks.Client.DelegateHandlers;
 using Microsoft.Extensions.Logging;
 using Service.Blockchain.Wallets.MyNoSql.AssetsMappings;
+using MyJetWallet.ApiSecurityManager.Autofac;
 
 namespace Service.Fireblocks.Signer.Modules
 {
@@ -31,6 +32,8 @@ namespace Service.Fireblocks.Signer.Modules
             builder.RegisterMyNoSqlWriter<FireblocksApiKeysNoSql>(() => Program.Settings.MyNoSqlWriterUrl, FireblocksApiKeysNoSql.TableName);
 
             builder.RegisterMyNoSqlReader<AssetMappingNoSql>(myNoSqlClient, AssetMappingNoSql.TableName);
+
+            builder.RegisterEncryptionServiceClient("fireblocks-signer", () => Program.Settings.MyNoSqlWriterUrl);
         }
     }
 }
