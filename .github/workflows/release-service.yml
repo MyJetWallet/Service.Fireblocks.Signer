@@ -83,3 +83,24 @@ jobs:
         git config user.email github-actions@github.com
         git commit -a -m "Update version of service myjetwallet.service.fireblocks.signer"
         git push
+
+  docker_update_version:
+    needs: build
+    runs-on: self-hosted
+    steps:
+    - name: get uat docker yamls
+      uses: actions/checkout@v2
+      with:
+        repository: MyJetWallet/docker-infrastructure
+        ref: uat
+        token: ${{ secrets.UAT_GIT_TOKEN }}
+    - run: |
+        pattern=myjetwallet.service.fireblocks.signer:.*$
+        imagename=myjetwallet.service.fireblocks.signer:${GITHUB_REF#refs/tags/}
+        reg=$"s/${pattern}/${imagename}/g"
+        echo $reg
+        find . -type f -name "docker-compose.*" -print0 -exec sed -i -r $reg {} \;
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git commit -a -m "Update version of service myjetwallet.service.fireblocks.signer"
+        git push
