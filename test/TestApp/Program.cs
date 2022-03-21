@@ -20,10 +20,12 @@ namespace TestApp
             Console.Write("Press enter to start");
             Console.ReadLine();
 
-            var securityFactory = new ApiSecurityManagerClientFactory("http://localhost:5001");
+            var securityFactory = new ApiSecurityManagerClientFactory("http://localhost:5001");//("http://192.168.70.21:80");//;
 
-            var encryptionService =  securityFactory.GetEncryptionKeyGrpcServicee();
+            var encryptionService =  securityFactory.GetEncryptionKeyGrpcService();
             var apiKeyService = securityFactory.GetApiKeyService();
+
+            var apikids = await apiKeyService.GetApiKeyIdsAsync(new MyJetWallet.ApiSecurityManager.Grpc.Models.GetApiKeyIdsRequest { });
 
             var encSet = await encryptionService.SetEncryptionKeyAsync(new MyJetWallet.ApiSecurityManager.Grpc.Models.SetEncryptionKeyRequest()
             {
