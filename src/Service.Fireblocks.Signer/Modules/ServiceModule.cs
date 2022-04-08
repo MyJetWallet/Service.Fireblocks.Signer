@@ -33,7 +33,7 @@ namespace Service.Fireblocks.Signer.Modules
 
             builder.RegisterMyNoSqlReader<AssetMappingNoSql>(myNoSqlClient, AssetMappingNoSql.TableName);
 
-            builder.RegisterEncryptionServiceClient("fireblocks-signer", () => Program.Settings.MyNoSqlWriterUrl);
+            builder.RegisterEncryptionServiceClient();
         }
     }
 }
