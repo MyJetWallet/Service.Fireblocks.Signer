@@ -6,6 +6,9 @@
         AlreadyExist,
         DoesNotExist,
         ApiError,
-        NotEnoughBalance
+        NotEnoughBalance,
+        NoKey,
+        WrongSignature,
+        SignatureExpired
     }
 }

@@ -12,7 +12,5 @@ namespace Service.Fireblocks.Signer.Client
         }
 
         public ITransactionService GetTransactionService() => CreateGrpcService<ITransactionService>();
-
-        public IEncryptionService GetEncryptionService() => CreateGrpcService<IEncryptionService>();
     }
 }

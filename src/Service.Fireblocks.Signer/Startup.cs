@@ -5,15 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Autofac;
-using MyJetWallet.Sdk.GrpcMetrics;
 using MyJetWallet.Sdk.GrpcSchema;
 using MyJetWallet.Sdk.Service;
 using Prometheus;
-using ProtoBuf.Grpc.Server;
 using Service.Fireblocks.Signer.Grpc;
 using Service.Fireblocks.Signer.Modules;
 using Service.Fireblocks.Signer.Services;
-using SimpleTrading.BaseMetrics;
 using SimpleTrading.ServiceStatusReporterConnector;
 using MyJetWallet.ApiSecurityManager.Autofac;
 
@@ -48,7 +45,6 @@ namespace Service.Fireblocks.Signer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcSchema<TransactionService, ITransactionService>();
-                endpoints.MapGrpcSchema<EncryptionService, IEncryptionService>();
                 endpoints.RegisterGrpcServices();
 
                 endpoints.MapGrpcSchemaRegistry();

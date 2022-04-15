@@ -19,8 +19,6 @@ namespace Service.Fireblocks.Signer
 
         public static SettingsModel Settings { get; private set; }
 
-        public static EnvSettingsModel EnvSettings { get; private set; }
-
         public static ILoggerFactory LogFactory { get; private set; }
 
         public static Func<T> ReloadedSettings<T>(Func<SettingsModel, T> getter)
@@ -38,7 +36,6 @@ namespace Service.Fireblocks.Signer
             Console.Title = "MyJetWallet Service.Fireblocks.Signer";
 
             Settings = SettingsReader.GetSettings<SettingsModel>(SettingsFileName);
-            EnvSettings = EnvReaderSettings();
 
             using var loggerFactory = LogConfigurator.ConfigureElk("MyJetWallet", Settings.SeqServiceUrl, Settings.ElkLogs);
 
@@ -84,23 +81,5 @@ namespace Service.Fireblocks.Signer
                     services.AddSingleton(loggerFactory);
                     services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                 });
-
-        private static EnvSettingsModel EnvReaderSettings()
-        {
-            var builder = new ConfigurationBuilder()
-                .AddEnvironmentVariables();
-
-            var configuration = builder.Build();
-
-            var result = configuration.Get<EnvSettingsModel>();
-
-            if (string.IsNullOrEmpty(result.ENCRYPTION_KEY))
-            {
-                Console.WriteLine("Please set Env Variable EncryptionKey");
-                throw new Exception("Please set Env Variable EncryptionKey");
-            }
-
-            return result;
-        }
     }
 }

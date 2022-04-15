@@ -19,8 +19,6 @@ namespace Service.Fireblocks.Signer.Modules
         {
             var myNoSqlClient = builder.CreateNoSqlClient(Program.ReloadedSettings(e => e.MyNoSqlReaderHostPort));
             var logger = Program.LogFactory.CreateLogger<LoggerMiddleware>();
-            var encryptionService = new SymmetricEncryptionService(Program.EnvSettings.GetEncryptionKey());
-            builder.RegisterInstance(encryptionService);
 
             builder.RegisterFireblocksClient(new MyJetWallet.Fireblocks.Client.ClientConfigurator()
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
@@ -40,5 +41,20 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
         /// </summary>
         [DataMember(Order = 10)]
         public bool ForceSweep { get; set; }
+
+        [DataMember(Order = 11)]
+        public string Signature { get; set; }
+
+        [DataMember(Order = 12)]
+        public string ClientId { get; set; }
+
+        [DataMember(Order = 13)]
+        public DateTime IssuedAt { get; set; }
+        
+        /// <summary>
+        /// For Signature Only
+        /// </summary>
+        [DataMember(Order = 14)]
+        public decimal AmountWithFee { get; set; }
     }
 }

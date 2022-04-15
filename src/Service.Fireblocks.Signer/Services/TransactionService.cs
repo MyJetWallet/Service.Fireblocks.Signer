@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MyJetWallet.ApiSecurityManager.ApiKeys;
+using MyJetWallet.ApiSecurityManager.AsymmetricEncryption;
+using MyJetWallet.ApiSecurityManager.TransactionSignature;
 using MyJetWallet.Fireblocks.Client;
 using MyJetWallet.Fireblocks.Domain.Models.Addresses;
 using MyJetWallet.Sdk.Service;
@@ -20,24 +23,113 @@ namespace Service.Fireblocks.Signer.Services
         private readonly ITransactionsClient _transactionsClient;
         private readonly IVaultClient _vaultClient;
         private readonly IMyNoSqlServerDataReader<AssetMappingNoSql> _assetMappings;
+        private readonly IAsymmetricEncryptionService _asymmetricEncryptionService;
+        private readonly IApiKeyStorage _apiKeyStorage;
 
         public TransactionService(ILogger<TransactionService> logger,
             IClient client,
             ITransactionsClient transactionsClient,
             IVaultClient vaultClient,
-            IMyNoSqlServerDataReader<AssetMappingNoSql> assetMappings)
+            IMyNoSqlServerDataReader<AssetMappingNoSql> assetMappings,
+            IAsymmetricEncryptionService asymmetricEncryptionService,
+            IApiKeyStorage apiKeyStorage)
         {
             _logger = logger;
             _client = client;
             _transactionsClient = transactionsClient;
             _vaultClient = vaultClient;
             _assetMappings = assetMappings;
+            _asymmetricEncryptionService = asymmetricEncryptionService;
+            _apiKeyStorage = apiKeyStorage;
         }
 
         public async Task<Grpc.Models.Transactions.CreateTransactionResponse> CreateTransactionAsync(CreateTransactionRequest request)
         {
             try
             {
+                _logger.LogInformation("Signer CreateTransactionAsync {@context}", request.ToJson());
+
+                if (Program.Settings.CheckTransactionSignature)
+                {
+                    //Withdrawal case on external address
+                    if (string.IsNullOrEmpty(request.DestinationVaultAccountId))
+                    {
+                        var publicKey = _apiKeyStorage.Get(Program.Settings.SignaturePublicApiKeyId);
+
+                        if (publicKey == null)
+                        {
+                            _logger.LogError("No key is set for signature check FIREBLOCKS! {@context}", request.ToJson());
+
+                            return new Grpc.Models.Transactions.CreateTransactionResponse
+                            {
+                                Error = new Grpc.Models.Common.ErrorResponse
+                                {
+                                    ErrorCode = Grpc.Models.Common.ErrorCode.NoKey,
+                                }
+                            };
+                        }
+
+                        var signatureComponents = TransactionSignatureComponents.Create(
+                            request.AmountWithFee,
+                            request.AssetSymbol,
+                            request.AssetNetwork,
+                            request.ClientId,
+                            DateTime.SpecifyKind(request.IssuedAt, DateTimeKind.Utc),
+                            request.ToAddress,
+                            request.Tag);
+
+                        var pubKey = AsymmetricEncryptionUtils.ReadPublicKeyFromPem(publicKey.PrivateKeyValue);
+                        var signatureContent = signatureComponents.GetSignatureContent();
+                        var isSigned = _asymmetricEncryptionService.VerifySign(
+                            signatureContent,
+                            request.Signature,
+                            pubKey);
+
+                        if (!isSigned)
+                        {
+                            _logger.LogError("Wrong signature FIREBLOCKS! {@context}", request.ToJson());
+
+                            return new Grpc.Models.Transactions.CreateTransactionResponse
+                            {
+                                Error = new Grpc.Models.Common.ErrorResponse
+                                {
+                                    ErrorCode = Grpc.Models.Common.ErrorCode.WrongSignature,
+                                }
+                            };
+                        }
+
+                        if (DateTime.UtcNow - signatureComponents.IssuedAt > Program.Settings.SignatureValidFor)
+                        {
+                            _logger.LogError("Signature has expired FIREBLOCKS! {@context}", request.ToJson());
+
+                            return new Grpc.Models.Transactions.CreateTransactionResponse
+                            {
+                                Error = new Grpc.Models.Common.ErrorResponse
+                                {
+                                    ErrorCode = Grpc.Models.Common.ErrorCode.SignatureExpired,
+                                }
+                            };
+                        }
+
+                        if (request.Amount > request.AmountWithFee)
+                        {
+                            _logger.LogError("SOMEONE USING OLD Signature TO TRANSFER MORE FUNDS FIREBLOCKS! {@context}", request.ToJson());
+
+                            return new Grpc.Models.Transactions.CreateTransactionResponse
+                            {
+                                Error = new Grpc.Models.Common.ErrorResponse
+                                {
+                                    ErrorCode = Grpc.Models.Common.ErrorCode.SignatureExpired,
+                                }
+                            };
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogInformation("No Signature needed, internal transfer {@context}", request.ToJson());
+                    }
+                }
+
                 var assetMapping = _assetMappings.Get(AssetMappingNoSql.GeneratePartitionKey(request.AssetSymbol),
                                                       AssetMappingNoSql.GenerateRowKey(request.AssetNetwork));
 

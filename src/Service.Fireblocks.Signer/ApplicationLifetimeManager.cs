@@ -16,7 +16,6 @@ namespace Service.Fireblocks.Signer
         private readonly IMyNoSqlServerDataWriter<FireblocksApiKeysNoSql> _myNoSqlServerData;
         private readonly INotificatorSubscriber _notificatorSubscriber;
         private readonly KeyActivator _keyActivator;
-        private readonly SymmetricEncryptionService _symmetricEncryptionService;
         private readonly MyNoSqlClientLifeTime _myNoSqlClient;
 
         public ApplicationLifetimeManager(
@@ -25,7 +24,6 @@ namespace Service.Fireblocks.Signer
             IMyNoSqlServerDataWriter<FireblocksApiKeysNoSql> myNoSqlServerData,
             INotificatorSubscriber notificatorSubscriber,
             KeyActivator keyActivator,
-            SymmetricEncryptionService symmetricEncryptionService,
             MyNoSqlClientLifeTime myNoSqlClient)
             : base(appLifetime)
         {
@@ -33,7 +31,6 @@ namespace Service.Fireblocks.Signer
             _myNoSqlServerData = myNoSqlServerData;
             _notificatorSubscriber = notificatorSubscriber;
             _keyActivator = keyActivator;
-            _symmetricEncryptionService = symmetricEncryptionService;
             _myNoSqlClient = myNoSqlClient;
         }
 
