@@ -87,7 +87,7 @@ namespace TestApp
                 });
 
                 /*
-                  "{\"ExternalTransactionId\":\"fire_tx_812_59\",\"Amount\":-0.00041,\"AssetSymbol\":\"BTC\",\"AssetNetwork\":\"fireblocks-btc-test\",\"ToAddress\":\"2N3oefVeg6stiTb5Kh3ozCSkaqmx91FDbsm\",\"Tag\":null,\"TreatAsGrossAmount\":false,\"DestinationVaultAccountId\":null,\"FromVaultAccountId\":null,\"ForceSweep\":false,\"Signature\":\"T7Ng8TgnFx1sKDfeWCQ5FMwszQKfek2V5Men0gc9t5397PtStNYv7LTU65FTPBJ0OAGHfpiQ6yUKFjX2oeJVCGu8tH6TM6c9RZS7SyNKSazvNZC2CaS0UDuyP0KmfqB2Bzu834Wv/C9A4Rd60U9X8bp3AhjwzEkz0J5GFFUaeFmvCdhQcCUSDuHMeNrAIAdXxENOILH7zPVpckSckiz2tWrzTbA0jeluqwM9PM3sFwdE7LC2nmHfyAz78ceyJzZb/uYXfFyDnVkffwTpDFKagBiob/BFaBmz0rX7wUTINbM9qXUpPFyUppDzNlRYTTjMTPzLrptXzdJ1mJHO9qduupdMD3fmQZ0UBbdKyo4Wh/ntSrg6b/5QcF03rWiHztXxH0qyyd2gUQqHz7b0HL6eND/6y6x52zAreLj/KWOVb0ssxziwkCQCCjACI5HmOTKUDXGdAj3lCgOeNeoJPwQUuWRz2v1rM8luaL2Pg3ren4lcjf3CyWeIxhWeb8r5G/KFbo8IJlDgQolYusxaLHeaRNnkiI1mprBNivjLraeBYkSWt4uBHZc7yyuKoaOWUXWchRui5NIuxjtpvxpt4zBJVBQ56UWGyOlk0zGszRuZTZseccy4vAQIeHbu/ta2oS60RYLTxqbjtCKlXHUB88X5TjRNllBVYM0E=\",\"ClientId\":\"9ddecae3dba14861a934551b0bfa9e33\",\"IssuedAt\":\"2022-04-19T09:31:26.91699\",\"AmountWithFee\":0.0001}"
+                 
                  */
 
                 var issuedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

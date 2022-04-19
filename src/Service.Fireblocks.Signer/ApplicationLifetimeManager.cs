@@ -17,6 +17,7 @@ namespace Service.Fireblocks.Signer
         private readonly INotificatorSubscriber _notificatorSubscriber;
         private readonly KeyActivator _keyActivator;
         private readonly MyNoSqlClientLifeTime _myNoSqlClient;
+        private bool _isSet = false;
 
         public ApplicationLifetimeManager(
             IHostApplicationLifetime appLifetime,
@@ -38,11 +39,15 @@ namespace Service.Fireblocks.Signer
         {
             _notificatorSubscriber.Subscribe((key) =>
             {
+                if (_isSet)
+                    return;
+
                 if (key.Id == Program.Settings.ApiKeyId)
                     try
                     {
                         _logger.LogInformation("Activating keys");
                         _keyActivator.ActivateKeys(key.ApiKeyValue, key.PrivateKeyValue);
+                        _isSet = true;
                     }
                     catch (System.Exception e)
                     {
