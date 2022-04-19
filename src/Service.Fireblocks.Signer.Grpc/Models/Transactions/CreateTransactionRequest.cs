@@ -48,13 +48,17 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
         [DataMember(Order = 12)]
         public string ClientId { get; set; }
 
+        [Obsolete]
         [DataMember(Order = 13)]
         public DateTime IssuedAt { get; set; }
-        
+
         /// <summary>
         /// For Signature Only
         /// </summary>
         [DataMember(Order = 14)]
         public decimal AmountWithFee { get; set; }
+
+        [DataMember(Order = 15)]
+        public long IssuedAtUnixTime { get; set; }
     }
 }

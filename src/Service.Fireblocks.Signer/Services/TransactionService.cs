@@ -74,7 +74,7 @@ namespace Service.Fireblocks.Signer.Services
                             request.AssetSymbol,
                             request.AssetNetwork,
                             request.ClientId,
-                            DateTime.SpecifyKind(request.IssuedAt, DateTimeKind.Utc),
+                            request.IssuedAtUnixTime,
                             request.ToAddress,
                             request.Tag);
 
@@ -98,7 +98,8 @@ namespace Service.Fireblocks.Signer.Services
                             };
                         }
 
-                        if (DateTime.UtcNow - signatureComponents.IssuedAt > Program.Settings.SignatureValidFor)
+                        var date = DateTimeOffset.FromUnixTimeMilliseconds(signatureComponents.IssuedAt).UtcDateTime;
+                        if (DateTime.UtcNow - date > Program.Settings.SignatureValidFor)
                         {
                             _logger.LogError("Signature has expired FIREBLOCKS! {@context}", request.ToJson());
 

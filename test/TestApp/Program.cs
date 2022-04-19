@@ -69,13 +69,12 @@ namespace TestApp
                 {
                     ApiKey = publicKey,
                     ApiKeyId = "fireblocks-api-key-id",
-                    EncryptionKeyId = "fireblocks-signer",
+                    EncryptionKeyId = "encryption-key-id",
                     PrivateKey = privateKey,
                 });
             }
 
             {
-
                 var publicKey = await File.ReadAllTextAsync(@"C:\Git\rsa-test\public-key.pem");
                 var privateKey = await File.ReadAllTextAsync(@"C:\Git\rsa-test\private-key.pem");
 
@@ -83,40 +82,52 @@ namespace TestApp
                 {
                     ApiKey = "any",
                     ApiKeyId = "transaction-signature-public-key",
-                    EncryptionKeyId = "fireblocks-signer",
+                    EncryptionKeyId = "encryption-key-id",
                     PrivateKey = publicKey,
                 });
 
-                var issuedAt = DateTime.UtcNow;
+                /*
+                  "{\"ExternalTransactionId\":\"fire_tx_812_59\",\"Amount\":-0.00041,\"AssetSymbol\":\"BTC\",\"AssetNetwork\":\"fireblocks-btc-test\",\"ToAddress\":\"2N3oefVeg6stiTb5Kh3ozCSkaqmx91FDbsm\",\"Tag\":null,\"TreatAsGrossAmount\":false,\"DestinationVaultAccountId\":null,\"FromVaultAccountId\":null,\"ForceSweep\":false,\"Signature\":\"T7Ng8TgnFx1sKDfeWCQ5FMwszQKfek2V5Men0gc9t5397PtStNYv7LTU65FTPBJ0OAGHfpiQ6yUKFjX2oeJVCGu8tH6TM6c9RZS7SyNKSazvNZC2CaS0UDuyP0KmfqB2Bzu834Wv/C9A4Rd60U9X8bp3AhjwzEkz0J5GFFUaeFmvCdhQcCUSDuHMeNrAIAdXxENOILH7zPVpckSckiz2tWrzTbA0jeluqwM9PM3sFwdE7LC2nmHfyAz78ceyJzZb/uYXfFyDnVkffwTpDFKagBiob/BFaBmz0rX7wUTINbM9qXUpPFyUppDzNlRYTTjMTPzLrptXzdJ1mJHO9qduupdMD3fmQZ0UBbdKyo4Wh/ntSrg6b/5QcF03rWiHztXxH0qyyd2gUQqHz7b0HL6eND/6y6x52zAreLj/KWOVb0ssxziwkCQCCjACI5HmOTKUDXGdAj3lCgOeNeoJPwQUuWRz2v1rM8luaL2Pg3ren4lcjf3CyWeIxhWeb8r5G/KFbo8IJlDgQolYusxaLHeaRNnkiI1mprBNivjLraeBYkSWt4uBHZc7yyuKoaOWUXWchRui5NIuxjtpvxpt4zBJVBQ56UWGyOlk0zGszRuZTZseccy4vAQIeHbu/ta2oS60RYLTxqbjtCKlXHUB88X5TjRNllBVYM0E=\",\"ClientId\":\"9ddecae3dba14861a934551b0bfa9e33\",\"IssuedAt\":\"2022-04-19T09:31:26.91699\",\"AmountWithFee\":0.0001}"
+                 */
+
+                var issuedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 var signatureComponents = TransactionSignatureComponents.Create(
-                            0.01m,
-                            "ETH",
-                            "fireblocks-eth-test",
-                            "test",
+                            0.005m,
+                            "BTC",
+                            "fireblocks-btc-test",
+                            "9ddecae3dba14861a934551b0bfa9e33",
                             issuedAt,
-                            "0x83ceAC6A4b7060348d8Ebf4996817962Db7e3758",
-                            "");
+                            "2MtiUTjVGZ3fgj4ZuE63E7i31vP5HboMibx");
 
                 var signatureContent = signatureComponents.GetSignatureContent();
+                var signatureOld = "a+tGq8diwdBNOfEfyMSnQoqXr9mspeTws0llOubucTfq3KiojijzdVEHnYssLEXGAZQ4oqfdaKywnZBz+ccQbpSfVbOwHtQTmRa30HUrZAC+xjX/QZ0KsDqj3tPwts+JqEi3HmacnguRs2PE8PyK3GNhMC0zTEfo9hxPMybKr86qy5gxHJWCUA9BkjPRSfOFqog6+zHzY1WE2/oI+n3QoHpueCDdfDP93oVcKf7hLTyw7v3YfW4hyae2UX4U6UANMd9wCBbBiZlLJYfGC+KGZbUVbW2J3yF712WkBn7U5wr0/WtUXAuToe2KPJt2cp5t4DbAJCsDqgsgfa9Dgk9vuqxG767AXc1JW1P3lV0Wkm5dF2FvVeACHXobjVrhcLfL4mFaONggNXzANca/yjH8GHnbyWIHPOpXSHpOO4X4bKmtILrm3ZbaIeSkEuo/mH/yhoM4e5jy7CcsuWoYFnWghzCAC0IwR6oeQn0fGzJomxmEAnFXIg0ZYnEvD1O/LeVIzhriZT2AVLAbdIANy3BaII4xpOUxLetbar2DvDqlvGA+VoK6gXRnwM6rOKgm9OE1ecxpiHPvNbsU+MGmwWKWAgrTlPJnuAYEk5wCUHIjALHW734XhuXg/2alBJh8/JlQRjdh7i9ArExS+25Pc4QVnk5efrPUbpjmNdP1DhY3bIA=";
 
                 Console.WriteLine(signatureContent);
 
                 var signature = asymmetricService.Sign(signatureContent, AsymmetricEncryptionUtils.ReadPrivateKeyFromPem(privateKey));
 
+                {
+                    var expSignContent = "{\"amount\":0.005,\"assetSymbol\":\"BTC\",\"assetNetwork\":\"fireblocks-btc-test\",\"toAddress\":\"2MtiUTjVGZ3fgj4ZuE63E7i31vP5HboMibx\",\"clientId\":\"9ddecae3dba14861a934551b0bfa9e33\",\"issuedAt\":\"2022-04-19T11:48:28.9243665Z\"}";
+
+                    var expSignature = asymmetricService.Sign(expSignContent, AsymmetricEncryptionUtils.ReadPrivateKeyFromPem(privateKey));
+
+                    Console.WriteLine(expSignature);
+                }
+
                 var tx = await client.CreateTransactionAsync(new Service.Fireblocks.Signer.Grpc.Models.Transactions.CreateTransactionRequest
                 {
-                    Amount = 0.01m,
-                    AssetSymbol = "ETH",
-                    AssetNetwork = "fireblocks-eth-test",
+                    Amount = signatureComponents.Amount,
+                    AssetSymbol = signatureComponents.AssetSymbol,
+                    AssetNetwork = signatureComponents.AssetNetwork,
                     ExternalTransactionId = Guid.NewGuid().ToString(),
-                    Tag = "",
-                    ToAddress = "0x83ceAC6A4b7060348d8Ebf4996817962Db7e3758",
+                    Tag = signatureComponents.Tag,
+                    ToAddress = signatureComponents.ToAddress,
                     //DestinationVaultAccountId = "16",
-                    FromVaultAccountId = "11",
-                    AmountWithFee = 0.01m,
-                    ClientId = "test",
-                    IssuedAt = issuedAt,
-                    Signature = signature,
+                    //FromVaultAccountId = "11",
+                    AmountWithFee = signatureComponents.Amount,
+                    ClientId = signatureComponents.ClientId,
+                    IssuedAtUnixTime = issuedAt,
+                    Signature = signatureOld,
                 TreatAsGrossAmount = true,
                 });
             }
