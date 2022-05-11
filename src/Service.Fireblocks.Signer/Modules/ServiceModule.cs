@@ -17,7 +17,7 @@ namespace Service.Fireblocks.Signer.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var myNoSqlClient = builder.CreateNoSqlClient(Program.ReloadedSettings(e => e.MyNoSqlReaderHostPort));
+            var myNoSqlClient = builder.CreateNoSqlClient(Program.Settings.MyNoSqlReaderHostPort, Program.LogFactory);
             var logger = Program.LogFactory.CreateLogger<LoggerMiddleware>();
 
             builder.RegisterFireblocksClient(new MyJetWallet.Fireblocks.Client.ClientConfigurator()
