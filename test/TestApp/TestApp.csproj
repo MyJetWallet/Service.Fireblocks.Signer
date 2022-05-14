@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.Net.Client" Version="2.45.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.46.0" />
     <PackageReference Include="MyJetWallet.ApiSecurityManager" Version="2.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="protobuf-net.Grpc" Version="1.0.152" />
