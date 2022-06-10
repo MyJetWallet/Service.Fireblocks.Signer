@@ -16,7 +16,7 @@
     <PackageReference Include="MyJetWallet.Fireblocks.Client" Version="1.4.8" />
     <PackageReference Include="MyJetWallet.Sdk.GrpcMetrics" Version="2.0.4" />
     <PackageReference Include="MyJetWallet.Sdk.GrpcSchema" Version="1.0.6" />
-    <PackageReference Include="MyJetWallet.Sdk.NoSql" Version="2.2.4" />
+    <PackageReference Include="MyJetWallet.Sdk.NoSql" Version="2.2.5" />
     <PackageReference Include="MyJetWallet.Sdk.Service" Version="2.2.4" />
     <PackageReference Include="MyJetWallet.Service.Blockchain.Wallets.Client" Version="1.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
