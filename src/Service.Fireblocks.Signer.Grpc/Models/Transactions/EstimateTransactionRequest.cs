@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
 {
     [DataContract]
-    public class CreateTransactionRequest
+    public class EstimateTransactionRequest
     {
         [DataMember(Order = 1)]
         public string ExternalTransactionId { get; set; }
@@ -47,33 +47,5 @@ namespace Service.Fireblocks.Signer.Grpc.Models.Transactions
 
         [DataMember(Order = 12)]
         public string ClientId { get; set; }
-
-        [Obsolete]
-        [DataMember(Order = 13)]
-        public DateTime IssuedAt { get; set; }
-
-        /// <summary>
-        /// For Signature Only
-        /// </summary>
-        [DataMember(Order = 14)]
-        public decimal AmountWithFee { get; set; }
-
-        [DataMember(Order = 15)]
-        public long IssuedAtUnixTime { get; set; }
-    }
-
-    [DataContract]
-    public class FeeSettings
-    {
-        public enum FeeLevel
-        {
-            Low,
-            Medium,
-            High
-        }
-
-        [DataMember(Order = 1)]
-        public FeeLevel? Level { get; set; }
-
     }
 }

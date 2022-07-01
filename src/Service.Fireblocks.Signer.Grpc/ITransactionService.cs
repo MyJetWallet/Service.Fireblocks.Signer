@@ -12,6 +12,9 @@ namespace Service.Fireblocks.Signer.Grpc
         Task<CreateTransactionResponse> CreateTransactionAsync(CreateTransactionRequest request);
 
         [OperationContract]
+        Task<EstimateTransactionResponse> EstimateTransactionAsync(EstimateTransactionRequest request);
+
+        [OperationContract]
         Task<ValidateAddressResponse> ValidateAddressAsync(ValidateAddressRequest request);
     }
 }

@@ -93,11 +93,11 @@ namespace TestApp
                 var issuedAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 var signatureComponents = TransactionSignatureComponents.Create(
                             0.005m,
-                            "BTC",
-                            "fireblocks-btc-test",
+                            "TRX",
+                            "fireblocks-tron-test",
                             "9ddecae3dba14861a934551b0bfa9e33",
                             issuedAt,
-                            "2MtiUTjVGZ3fgj4ZuE63E7i31vP5HboMibx");
+                            "TTXefmXVfqnjPyYH7Z3SrNrfvU3iPdceiF");
 
                 var signatureContent = signatureComponents.GetSignatureContent();
                 var signatureOld = "a+tGq8diwdBNOfEfyMSnQoqXr9mspeTws0llOubucTfq3KiojijzdVEHnYssLEXGAZQ4oqfdaKywnZBz+ccQbpSfVbOwHtQTmRa30HUrZAC+xjX/QZ0KsDqj3tPwts+JqEi3HmacnguRs2PE8PyK3GNhMC0zTEfo9hxPMybKr86qy5gxHJWCUA9BkjPRSfOFqog6+zHzY1WE2/oI+n3QoHpueCDdfDP93oVcKf7hLTyw7v3YfW4hyae2UX4U6UANMd9wCBbBiZlLJYfGC+KGZbUVbW2J3yF712WkBn7U5wr0/WtUXAuToe2KPJt2cp5t4DbAJCsDqgsgfa9Dgk9vuqxG767AXc1JW1P3lV0Wkm5dF2FvVeACHXobjVrhcLfL4mFaONggNXzANca/yjH8GHnbyWIHPOpXSHpOO4X4bKmtILrm3ZbaIeSkEuo/mH/yhoM4e5jy7CcsuWoYFnWghzCAC0IwR6oeQn0fGzJomxmEAnFXIg0ZYnEvD1O/LeVIzhriZT2AVLAbdIANy3BaII4xpOUxLetbar2DvDqlvGA+VoK6gXRnwM6rOKgm9OE1ecxpiHPvNbsU+MGmwWKWAgrTlPJnuAYEk5wCUHIjALHW734XhuXg/2alBJh8/JlQRjdh7i9ArExS+25Pc4QVnk5efrPUbpjmNdP1DhY3bIA=";
@@ -127,8 +127,8 @@ namespace TestApp
                     AmountWithFee = signatureComponents.Amount,
                     ClientId = signatureComponents.ClientId,
                     IssuedAtUnixTime = issuedAt,
-                    Signature = signatureOld,
-                TreatAsGrossAmount = true,
+                    Signature = signature,
+                    TreatAsGrossAmount = true,
                 });
             }
 
