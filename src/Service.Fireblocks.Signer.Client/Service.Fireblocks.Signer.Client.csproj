@@ -17,7 +17,7 @@
     <PackageReference Include="MyJetWallet.Sdk.Grpc" Version="2.0.0" />
     <PackageReference Include="MyJetWallet.Sdk.GrpcMetrics" Version="2.0.4" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
-    <PackageReference Include="protobuf-net.Grpc" Version="1.0.152" />
+    <PackageReference Include="protobuf-net.Grpc" Version="1.0.171" />
   </ItemGroup>
 
   <PropertyGroup>
